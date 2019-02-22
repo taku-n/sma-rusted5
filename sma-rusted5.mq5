@@ -1,6 +1,6 @@
 #import "rta.dll"
-void sma_c(double &p_dest[], const double &p_src[], unsigned int n,
-        unsigned int period);
+void sma_c(double &p_dest[], const double &p_src[], const unsigned int n,
+        const unsigned int period, const unsigned int begin);
 #import
 
 #property indicator_chart_window
@@ -12,6 +12,8 @@ void sma_c(double &p_dest[], const double &p_src[], unsigned int n,
 #property indicator_color1 clrRed
 #property indicator_style1 STYLE_SOLID
 #property indicator_width1 2
+
+input int PERIOD = 12;
 
 double sma[];
 
@@ -34,7 +36,13 @@ int OnCalculate(
         const long &VOL[],
         const int &SP[])
 {
-    sma_c(sma, C, TOTAL, 12);
+    unsigned int begin = 0;
+
+    if (PREV != 0) {
+        begin = PREV - 1;
+    }
+
+    sma_c(sma, C, TOTAL, PERIOD, begin);
 
     return TOTAL;
 }
